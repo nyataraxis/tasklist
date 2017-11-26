@@ -49,6 +49,9 @@ export class TableviewComponent implements OnInit {
   displayedColumns = ['id', 'name', 'progress'];
 
   dataObserve: Observer<Task[]>;
+  interval:any;
+  
+  private subscription: Subscription = new Subscription();
 
   @Output() deleteRequest = new EventEmitter<Task>();
 
@@ -64,12 +67,25 @@ export class TableviewComponent implements OnInit {
     this.dataSource = new MyDataSource(this.taskerService);
 
     this.dataObs = this.dataSource.connect();
+    this.refreshData();
+        this.interval = setInterval(() => { 
+            this.refreshData(); 
+        }, 15000);
 
   }
 
+  refreshData(){
+        this.subscription.add(
+            this.taskerService.getTasks().subscribe({
+      next: value => this.taskerService.dataChange.next(value)
+    })
+        );
+    }
   deleteTask(id:number, index:number): void {
   
   this.taskerService.deleteTask(id, index).subscribe(response => {
+
+  //   this.refreshData();
 
     console.log(response+"heh");
     

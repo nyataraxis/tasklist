@@ -93,11 +93,6 @@ export class TasksService {
   // });
   //const copiedData = this.data.slice();
   const newData = this.data.splice(indIn,1);
-  // {
-  //   this.dataChange.next(newData);
-
-  // }
-  //const newSubj = new Subject<Task[]>();
   this.dataChange.next(this.data);
   //newSubj.next()
   return this.http.delete<Task>(url, httpOptions).pipe(
